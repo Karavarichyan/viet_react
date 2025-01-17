@@ -1,57 +1,56 @@
-// import React from 'react';
-// import { FaAngleDown, FaAngleRight } from 'react-icons/fa';
+import React, { useState } from "react";
+import { FaAngleRight, FaAngleDown } from "react-icons/fa";
+import "../DropdownMenu.css";
 
-// const DropdownMenu = ({ label, items, isOpen, onToggle }) => {
-//   return (
-//     <div className="relative">
-//       <div
-//         onClick={onToggle}
-//         className="flex justify-between items-center px-4 py-3 cursor-pointer text-black hover:bg-gray-100"
-//       >
-//         <span>{label}</span>
-//         {items.length > 0 && <FaAngleDown />}
-//       </div>
+const DropdownMenu = ({ label, items, isMobile }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState(null);
 
-//       {isOpen && (
-//         <ul className="absolute left-0 bg-white shadow-lg border border-gray-200 rounded-md z-50 mt-2 w-48">
-//           {items.map((item, index) => (
-//             <li
-//               key={index}
-//               className="flex justify-between items-center px-4 py-2 text-black cursor-pointer hover:bg-gray-100"
-//             >
-//               {item}
-//               <FaAngleRight />
-//             </li>
-//           ))}
-//         </ul>
-//       )}
-//     </div>
-//   );
-// };
+  const handleMouseEnter = () => {
+    if (!isMobile) setIsOpen(true);
+  };
 
-// export default DropdownMenu;
-import React from 'react';
-import { FaAngleDown, FaAngleRight } from 'react-icons/fa';
+  const handleMouseLeave = () => {
+    if (!isMobile) setIsOpen(false);
+  };
 
-const DropdownMenu = ({ label, items }) => {
+  const handleClick = () => {
+    if (isMobile) setIsOpen(!isOpen);
+  };
+
   return (
-    <div className="relative group">
-      <button className="w-full flex justify-between items-center px-4 py-3 text-black font-bold hover:text-gray-500 transition">
-        {label}
-        {items.length > 0 && <FaAngleDown />}
-      </button>
+    <div className={`dropdown ${isMobile ? "mobile" : ""}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <div className="dropdown-label" onClick={handleClick}>
+        <span className="text-[16px] leading-[16px] w-[65px] font-medium">{label}</span>
+        {items.length > 0 && <FaAngleDown className="arrow-down" />}
+      </div>
 
-      {items.length > 0 && (
-        <ul className="absolute left-0 top-full bg-white shadow-md border border-gray-200 rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 w-48">
-          {items.map((item, index) => (
-            <li key={index} className="border-b last:border-b-0">
-              <a href="#" className="block px-4 py-2 text-black hover:text-gray-500 hover:bg-gray-100 transition">
-                {item}
-              </a>
+      <ul className={`dropdown-content divide-y divide-[#E9E9E9] ${isOpen ? "open" : ""}`}>
+        {items.map((item, index) =>
+          typeof item === "object" ? (
+            <li key={index} className="dropdown-submenu">
+              <div
+                className="submenu-label"
+                onMouseEnter={() => setOpenSubmenu(index)}
+                onMouseLeave={() => setOpenSubmenu(null)}
+              >
+                <span className="submenu-text text-[16px] leading-[16px] w-[65px] font-medium">{item.label}</span>
+                <FaAngleRight className="arrow-right" />
+              </div>
+              <ul className={`submenu-content ${openSubmenu === index ? "open" : ""}`}>
+                {item.items.map((subItem, subIndex) => (
+                  <li className="submenu-item-child text-[16px] leading-[16px] w-[65px] font-medium" key={subIndex}>{subItem}</li>
+                ))}
+              </ul>
             </li>
-          ))}
-        </ul>
-      )}
+          ) : (
+            <li key={index} className="submenu-item">
+              <span className="text-[16px] leading-[16px] w-[65px] font-medium">{item}</span>
+              <FaAngleRight className="arrow-right" />
+            </li>
+          )
+        )}
+      </ul>
     </div>
   );
 };

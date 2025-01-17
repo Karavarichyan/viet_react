@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import React, { useState } from 'react'
+import { FaSearch } from 'react-icons/fa'
 
 const SearchBar = () => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   return (
     <div className="relative flex items-center">
@@ -21,7 +21,7 @@ const SearchBar = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default SearchBar;
+export default SearchBar
