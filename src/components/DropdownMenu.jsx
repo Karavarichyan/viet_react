@@ -21,7 +21,7 @@ const DropdownMenu = ({ label, items, isMobile }) => {
   return (
     <div className={`dropdown ${isMobile ? "mobile" : ""}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="dropdown-label" onClick={handleClick}>
-        <span className="text-[16px] leading-[16px] w-[65px] font-medium">{label}</span>
+        <span className=" font-medium">{label}</span>
         {items.length > 0 && <FaAngleDown className="arrow-down" />}
       </div>
 
@@ -34,18 +34,18 @@ const DropdownMenu = ({ label, items, isMobile }) => {
                 onMouseEnter={() => setOpenSubmenu(index)}
                 onMouseLeave={() => setOpenSubmenu(null)}
               >
-                <span className="submenu-text text-[16px] leading-[16px] w-[65px] font-medium">{item.label}</span>
+                <span className="submenu-text  font-medium">{item.label}</span>
                 <FaAngleRight className="arrow-right" />
               </div>
               <ul className={`submenu-content ${openSubmenu === index ? "open" : ""}`}>
                 {item.items.map((subItem, subIndex) => (
-                  <li className="submenu-item-child text-[16px] leading-[16px] w-[65px] font-medium" key={subIndex}>{subItem}</li>
+                  <li className="submenu-item-child  font-medium" key={subIndex}>{subItem}</li>
                 ))}
               </ul>
             </li>
           ) : (
             <li key={index} className="submenu-item">
-              <span className="text-[16px] leading-[16px] w-[65px] font-medium">{item}</span>
+              <span className=" font-medium">{item}</span>
               <FaAngleRight className="arrow-right" />
             </li>
           )
