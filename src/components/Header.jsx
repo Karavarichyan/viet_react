@@ -48,11 +48,9 @@ const menuItems = [
 const Header = ({ onSearch }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [openAccordion, setOpenAccordion] = useState(null)
-  const [openSubAccordion, setOpenSubAccordion] = useState(null)
+  const [openSubAccordion, setOpenSubAccordion] = useState({})
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [isHidden, setIsHidden] = useState(false)
-  const [lastScrollY, setLastScrollY] = useState(0)
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -73,21 +71,6 @@ const Header = ({ onSearch }) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.innerWidth >= 768) {
-        if (window.scrollY > 200 && window.scrollY > lastScrollY) {
-          setIsHidden(true)
-        } else {
-          setIsHidden(false)
-        }
-        setLastScrollY(window.scrollY)
-      }
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [lastScrollY])
-
   const handleSearchToggle = () => {
     setIsSearchOpen(!isSearchOpen)
     setSearchQuery('')
@@ -101,11 +84,7 @@ const Header = ({ onSearch }) => {
   }
 
   return (
-    <header
-      className={`sticky top-0 bg-white shadow-md transition-transform duration-300 ${
-        isHidden ? '-translate-y-full' : 'translate-y-0'
-      }`}
-    >
+    <header className="sticky top-0 bg-white shadow-md transition-transform duration-300">
       <div className="flex items-center justify-between p-4 relative">
         <button
           className="text-2xl md:hidden"
@@ -122,7 +101,7 @@ const Header = ({ onSearch }) => {
           />
         </div>
 
-        <div className="absolute right-8 top-1/2 transform -translate-y-1/2">
+        <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
           {isSearchOpen ? (
             <div className="relative">
               <input
@@ -199,7 +178,7 @@ const Header = ({ onSearch }) => {
                   <div
                     className={`overflow-hidden transition-all ${
                       openAccordion === index
-                        ? 'max-h-40 opacity-100'
+                        ? 'max-h-96 opacity-100'
                         : 'max-h-0 opacity-0'
                     }`}
                   >
@@ -210,17 +189,17 @@ const Header = ({ onSearch }) => {
                             <button
                               className="flex justify-between w-full p-3 pl-6 text-left"
                               onClick={() =>
-                                setOpenSubAccordion(
-                                  openSubAccordion === subIndex
-                                    ? null
-                                    : subIndex
-                                )
+                                setOpenSubAccordion(prev => ({
+                                  ...prev,
+                                  [index]:
+                                    prev[index] === subIndex ? null : subIndex,
+                                }))
                               }
                             >
                               {item.label}
                               <FaAngleDown
                                 className={`transform transition-transform ${
-                                  openSubAccordion === subIndex
+                                  openSubAccordion[index] === subIndex
                                     ? 'rotate-180'
                                     : 'rotate-0'
                                 }`}
@@ -228,7 +207,7 @@ const Header = ({ onSearch }) => {
                             </button>
                             <div
                               className={`overflow-hidden transition-all ${
-                                openSubAccordion === subIndex
+                                openSubAccordion[index] === subIndex
                                   ? 'max-h-40 opacity-100'
                                   : 'max-h-0 opacity-0'
                               }`}
